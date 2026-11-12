@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Build All (make)",
+      "command": "make",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Run PRNG (make run-prng)",
+      "command": "make run-prng",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "type": "shell",
+      "label": "Run BigInt Test (make test-bigint)",
+      "command": "make test-bigint",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "type": "shell",
+      "label": "Run Modular Test (make test-modular)",
+      "command": "make test-modular",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "type": "shell",
+      "label": "Run All Tests (make test-all)",
+      "command": "make test-all",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}
