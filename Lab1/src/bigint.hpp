@@ -1,11 +1,8 @@
 #ifndef BIGINT_H
 #define BIGINT_H
 
-#include <cstdint>
-#include <cstddef>
-#include <iostream>
-#include <string>
 #include <algorithm>
+#include "lib/prng.h"
 
 template<size_t N>
 struct BigInt {
@@ -236,5 +233,84 @@ struct BigInt {
 
 using uint512_t = BigInt<8>;  // 512 bits
 using uint1024_t = BigInt<16>; // 1024 bits
+
+// assume that the highest bit of the result is set to 1
+// => value is in the range [2^(bit_length-1), 2^bit_length - 1]
+template<size_t N>
+BigInt<N> randomBigIntWithBitLength(prng_ctx *ctx, size_t bit_length) {
+  if (bit_length > N * BigInt<N>::BASE || bit_length == 0) {
+    throw std::invalid_argument("Bit length exceeds maximum for this BigInt size.");
+  }
+
+  BigInt<N> res;
+
+  size_t full_digits = bit_length / BigInt<N>::BASE;
+  size_t remaining_bits = bit_length % BigInt<N>::BASE;
+
+  for (size_t i = 0; i < full_digits; ++i) {
+    res.digits[i] = prng_next_u64(ctx);
+  }
+
+  if (remaining_bits > 0 && full_digits < N) {
+    uint64_t mask = (1ULL << remaining_bits) - 1;
+    res.digits[full_digits] = prng_next_u64(ctx) & mask;
+    res.digits[full_digits] |= (1ULL << (remaining_bits - 1)); // Ensure the highest bit is set
+  }
+  else if (full_digits > 0) { // Ensure the highest bit of the last full digit is set if there are no remaining bits
+    res.digits[full_digits - 1] |= (1ULL << (BigInt<N>::BASE - 1));
+  }
+
+  return res;
+}
+
+// assume that the value is in the range [0, 2^bit_length - 1]
+template<size_t N>
+BigInt<N> randomBigIntWithMaxBitLength(prng_ctx *ctx, size_t bit_length) {
+  if (bit_length > N * BigInt<N>::BASE || bit_length == 0) {
+    throw std::invalid_argument("Bit length exceeds maximum for this BigInt size.");
+  }
+
+  BigInt<N> res;
+
+  size_t full_digits = bit_length / BigInt<N>::BASE;
+  size_t remaining_bits = bit_length % BigInt<N>::BASE;
+
+  for (size_t i = 0; i < full_digits; ++i) {
+    res.digits[i] = prng_next_u64(ctx);
+  }
+
+  if (remaining_bits > 0 && full_digits < N) {
+    uint64_t mask = (1ULL << remaining_bits) - 1;
+    res.digits[full_digits] = prng_next_u64(ctx) & mask;
+  }
+
+  return res;
+}
+
+template<size_t N>
+BigInt<N> randomBigInt(prng_ctx *ctx) {
+  BigInt<N> res;
+  for (size_t i = 0; i < N; ++i) {
+    res.digits[i] = prng_next_u64(ctx);
+  }
+  return res;
+}
+
+template<size_t N>
+BigInt<N> randomBigIntInRange(prng_ctx *ctx, const BigInt<N> &min, const BigInt<N> &max) {
+  BigInt<N> range = max - min + BigInt<N>(1);
+  size_t bit_length = 0;
+  for (size_t i = N * BigInt<N>::BASE; i-- > 0; ) {
+    if (range.get_bit(i)) {
+      bit_length = i + 1;
+      break;
+    }
+  }
+  BigInt<N> rand_num;
+  do {
+    rand_num = randomBigIntWithMaxBitLength<N>(ctx, bit_length);
+  } while (rand_num >= range);
+  return rand_num + min;
+}
 
 #endif // BIGINT_H

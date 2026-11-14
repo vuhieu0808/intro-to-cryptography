@@ -43,6 +43,11 @@ test-modular: folders
 	$(CPP) $(CPP_FLAGS) $(ROOT)/test/modularTest.cpp -o $(BIN)/modularTest
 	./$(BIN)/modularTest
 
+test-dh: folders
+	@echo -e "\n### Compiling and running dhTest\n"
+	$(CPP) $(CPP_FLAGS) $(ROOT)/test/dhTest.cpp $(ROOT)/dh.cpp $(PRNG_SRC) $(SHA3_SRC) $(INCLUDE) $(LIB) -o $(BIN)/dhTest
+	./$(BIN)/dhTest
+
 test-all: test-bigint test-modular
 
 clean:
