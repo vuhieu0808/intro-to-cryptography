@@ -14,6 +14,20 @@ const uint64_t SMALL_PRIMES[] = {
 const size_t NUM_SMALL_PRIMES = sizeof(SMALL_PRIMES) / sizeof(SMALL_PRIMES[0]);
 
 template<size_t N>
+int isPrimeForSmallPrimes(const BigInt<N> &n) {
+  for (size_t i = 0; i < NUM_SMALL_PRIMES; ++i) {
+    if (n == BigInt<N>(SMALL_PRIMES[i])) {
+      return 1; // n is one of the small primes
+    }
+    BigInt<N> tmp = n;
+    if (tmp.div_small(SMALL_PRIMES[i]) == 0) {
+      return -1; // n is divisible by a small prime => not prime
+    }
+  }
+  return 0; // n is not one of the small primes and not divisible by any of them
+}
+
+template<size_t N>
 bool millerRabinTest(BigInt<N> n, BigInt<N> a, BigInt<N> d, size_t s) {
   // n-1 = 2^s * d
   // a^d mod n
@@ -35,7 +49,7 @@ bool millerRabinTest(BigInt<N> n, BigInt<N> a, BigInt<N> d, size_t s) {
 }
 
 template<size_t N>
-bool isPrime(BigInt<N> n, prng_ctx *ctx = nullptr, size_t iterations = 20) {
+bool isPrime(BigInt<N> n, prng_ctx *ctx = nullptr, bool primeSmallCheck = true, size_t iterations = 20) {
   BigInt<N> one(1), two(2), three(3);
   if (n < two) {
     return false; // 0 and 1 are not prime
@@ -47,13 +61,12 @@ bool isPrime(BigInt<N> n, prng_ctx *ctx = nullptr, size_t iterations = 20) {
     return false; // even numbers greater than 2 are not prime
   }
 
-  for (size_t i = 0; i < NUM_SMALL_PRIMES; ++i) {
-    if (n == BigInt<N>(SMALL_PRIMES[i])) {
-      return true; // n is one of the small primes
-    }
-    BigInt<N> tmp = n;
-    if (tmp.div_small(SMALL_PRIMES[i]) == 0) {
-      return false; // n is divisible by a small prime => not prime
+  if (primeSmallCheck) {
+    int small_prime_result = isPrimeForSmallPrimes<N>(n);
+    if (small_prime_result == 1) {
+      return true;
+    } else if (small_prime_result == -1) {
+      return false;
     }
   }
 

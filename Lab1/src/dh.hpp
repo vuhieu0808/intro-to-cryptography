@@ -29,13 +29,18 @@ BigInt<N> generate_safe_prime(prng_ctx *ctx, size_t bitsize = 512) {
   while (true) {
     BigInt<N> q = randomBigIntWithBitLength<N>(ctx, bitsize - 1);
     q.digits[0] |= 1ULL; // Ensure q is odd
-    if (!isPrime(q, ctx)) continue;
-
     BigInt<N> p = q + q + BigInt<N>(1); // p = 2q + 1
-    if (isPrime(p, ctx)) {
-      std::cout << "Generated safe prime p: " << p << '\n';
-      return p;
-    }
+    
+    int small_prime_result_q = isPrimeForSmallPrimes<N>(q);
+    if (small_prime_result_q == -1) continue; // q is composite
+    int small_prime_result_p = isPrimeForSmallPrimes<N>(p);
+    if (small_prime_result_p == -1) continue; // p is composite
+    
+    if (small_prime_result_q == 0 && !isPrime(q, ctx, false)) continue;
+    if (small_prime_result_p == 0 && !isPrime(p, ctx, false)) continue;
+
+    std::cout << "Generated safe prime p: " << p << '\n';
+    return p;
   }
 }
 
