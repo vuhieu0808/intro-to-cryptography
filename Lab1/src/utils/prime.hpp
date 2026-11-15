@@ -92,4 +92,4 @@ bool isPrime(BigInt<N> n, prng_ctx *ctx = nullptr, bool primeSmallCheck = true, 
   return true; // probably prime
 }
 
-#endif PRIME_HPP
+#endif // PRIME_HPP

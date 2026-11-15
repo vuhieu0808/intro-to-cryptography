@@ -1,5 +1,5 @@
-#ifndef DH_H
-#define DH_H
+#ifndef DH_HPP
+#define DH_HPP
 
 #include <iostream>
 #include "lib/prng.h"
@@ -44,8 +44,26 @@ BigInt<N> generate_safe_prime(prng_ctx *ctx, size_t bitsize = 512) {
   }
 }
 
-
 template<size_t N>
-BigInt<N> generate_private_key(prng_ctx *ctx, const BigInt<N> &p);
+BigInt<N> generate_private_key(prng_ctx *ctx, const BigInt<N> &p) {
+  BigInt<N> two(2);
+  BigInt<N> p_minus_two = p - two; // p - 2
+  return randomBigIntInRange<N>(ctx, two, p_minus_two);
+}
 
-#endif
+// a generator g => g^2 mod p != 1, g^(p-1)/2 mod p != 1
+template<size_t N>
+BigInt<N> generate_generator(prng_ctx *ctx, const BigInt<N> &p) {
+  BigInt<N> one(1), two(2);
+  BigInt<N> p_minus_two = p - two; // p - 2
+  BigInt<N> g;
+
+  while (true) {
+    g = randomBigIntInRange<N>(ctx, two, p_minus_two);
+    if (modular_exponentiation(g, two, p) != one && modular_exponentiation(g, (p - one) >> 1, p) != one) {
+      return g;
+    }
+  }
+}
+
+#endif // DH_HPP

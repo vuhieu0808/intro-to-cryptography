@@ -13,18 +13,27 @@ INCLUDE:=-I $(ROOT) -pthread
 LIB:=$(SHA3_INCLUDE)
 
 MAIN_PRNG:=$(ROOT)/main_prng.cpp
+MAIN_SRC:=$(ROOT)/main.cpp
 PRNG_SRC:=$(ROOT)/lib/prng.cpp
 
 BIN:=bin
 BUILD:=bin/build
 
-.PHONY: all folders prng run-prng test-bigint test-modular test-all clean
+.PHONY: all folders prng run-prng main run test-bigint test-modular test-dh test-all clean
 
-all: prng
+all: main
 
 folders:
 	@echo -e "\n### Creating folders\n"
 	mkdir -p $(BUILD) $(BIN)
+
+main: folders
+	@echo -e "\n### Compiling main\n"
+	$(CPP) $(CPP_FLAGS) $(MAIN_SRC) $(PRNG_SRC) $(SHA3_SRC) $(INCLUDE) $(LIB) -o $(BIN)/main
+
+run: main
+	@echo -e "\n### Running main\n"
+	./$(BIN)/main
 
 prng: folders
 	@echo -e "\n### Compiling prng\n"

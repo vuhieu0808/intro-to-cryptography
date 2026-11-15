@@ -2,6 +2,9 @@
 #define BIGINT_H
 
 #include <algorithm>
+#include <string>
+#include <iostream>
+#include <stdexcept>
 #include "lib/prng.h"
 
 template<size_t N>

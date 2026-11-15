@@ -3,8 +3,8 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "Build All (make)",
-      "command": "make",
+      "label": "Build Main (make main)",
+      "command": "make main",
       "options": {
         "cwd": "${workspaceFolder}/src"
       },
@@ -13,6 +13,24 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "shell",
+      "label": "Run Main (make run)",
+      "command": "make run",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "type": "shell",
+      "label": "Run DH Test (make test-dh)",
+      "command": "make test-dh",
+      "options": {
+        "cwd": "${workspaceFolder}/src"
+      },
+      "problemMatcher": ["$gcc"]
     },
     {
       "type": "shell",
