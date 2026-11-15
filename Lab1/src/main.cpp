@@ -8,7 +8,7 @@
 int main(void) {
   uint8_t seed[32];
   randombytes(seed, sizeof(seed)); // Generate a random seed for the PRNG
-  
+
   prng_ctx ctx;
   prng_seed(&ctx, seed, sizeof(seed));
 
@@ -32,6 +32,12 @@ int main(void) {
   // shared secret key of Alice & Bob
   uint512_t AliceSharedKey = modular_exponentiation<8>(B, a, p); // B^a mod p = (g^b)^a mod p = g^(ab) mod p
   uint512_t BobSharedKey = modular_exponentiation<8>(A, b, p); // A^b mod p = (g^a)^b mod p = g^(ab) mod p
+  std::cout << "Safe prime p: " << p << '\n';
+  std::cout << "Generator g: " << g << '\n';
+  std::cout << "Alice's private key a: " << a << '\n';
+  std::cout << "Bob's private key b: " << b << '\n';
+  std::cout << "Alice's public key A: " << A << '\n';
+  std::cout << "Bob's public key B: " << B << '\n';
   std::cout << "Alice's shared key: " << AliceSharedKey << '\n';
   std::cout << "Bob's shared key: " << BobSharedKey << '\n';
   std::cout << "Shared keys are equal: " << (AliceSharedKey == BobSharedKey ? "true" : "false") << '\n';

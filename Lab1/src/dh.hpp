@@ -39,7 +39,6 @@ BigInt<N> generate_safe_prime(prng_ctx *ctx, size_t bitsize = 512) {
     if (small_prime_result_q == 0 && !isPrime(q, ctx, false)) continue;
     if (small_prime_result_p == 0 && !isPrime(p, ctx, false)) continue;
 
-    std::cout << "Generated safe prime p: " << p << '\n';
     return p;
   }
 }
