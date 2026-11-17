@@ -8,19 +8,7 @@
 
 template<size_t N>
 BigInt<N> modular_exponentiation(const BigInt<N> &base, const BigInt<N> &exp, const BigInt<N> &mod) {
-  BigInt<N> result(1);
-  BigInt<N> b = Mod(base, mod);
-  BigInt<N> e = exp;
-
-  while (!e.is_zero()) {
-      if (e.digits[0] & 1) {
-        result = MulMod(result, b, mod);
-      }
-      e >>= 1;
-      b = MulMod(b, b, mod);
-  }
-
-  return result;
+  return ExpMod(base, exp, mod);
 }
 
 template<size_t N>

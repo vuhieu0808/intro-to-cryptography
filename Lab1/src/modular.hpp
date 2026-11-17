@@ -14,6 +14,9 @@ BigInt<N> addReduced(const BigInt<N> &x, const BigInt<N> &y, const BigInt<N> &m)
 
 template<size_t N>
 BigInt<N> Mod(const BigInt<N> &a, const BigInt<N> &m) {
+  if (a < m) {
+    return a;
+  }
   BigInt<N> rem = 0;
   for (size_t i = N * BigInt<N>::BASE; i-- > 0; ) { 
     rem = addReduced(rem, rem, m);
@@ -33,6 +36,9 @@ BigInt<N> AddMod(const BigInt<N> &x, const BigInt<N> &y, const BigInt<N> &m) {
 
 template<size_t N>
 BigInt<N> MulMod(const BigInt<N> &x, const BigInt<N> &y, const BigInt<N> &m) {
+  if (x.is_zero() || y.is_zero()) {
+    return BigInt<N>(0);
+  }
   BigInt<N> x_mod = Mod(x, m);
   BigInt<N> res = 0;
   for (size_t i = 0; i < N * BigInt<N>::BASE; ++i) {

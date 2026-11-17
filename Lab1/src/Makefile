@@ -57,7 +57,7 @@ test-dh: folders
 	$(CPP) $(CPP_FLAGS) $(ROOT)/test/dhTest.cpp $(ROOT)/dh.cpp $(PRNG_SRC) $(SHA3_SRC) $(INCLUDE) $(LIB) -o $(BIN)/dhTest
 	./$(BIN)/dhTest
 
-test-all: test-bigint test-modular
+test-all: test-bigint test-modular test-dh
 
 clean:
 	rm -rf ./bin
