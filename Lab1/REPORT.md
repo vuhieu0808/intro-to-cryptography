@@ -734,19 +734,19 @@ Số liệu thời gian không phải giá trị cố định: quá trình tìm 
 
 ### 8.2. Hạn chế
 
-| Hạn chế | Tác động |
-| --- | --- |
-| Nhân mô-đun theo từng bit | Sinh số nguyên tố an toàn và lũy thừa với khóa lớn có thể chậm. |
-| Dung lượng số lớn cố định, không báo lỗi tràn cộng hoặc hụt trừ | Người dùng thư viện phải tự bảo đảm các bất biến của thuật toán. |
-| Một số đầu vào chưa được kiểm tra đầy đủ | Cần xử lý mô-đun 0, khoảng ngẫu nhiên không hợp lệ, khoảng toàn miền và `bitsize` không phù hợp. |
-| `isPrime` có đối số mặc định `ctx = nullptr` | Nếu đầu vào cần đến bước Miller–Rabin, mã sẽ dùng con trỏ này để sinh cơ số; phải truyền trạng thái PRNG hợp lệ. |
-| Chưa ngăn `iterations = 0` | Số lẻ vượt bộ lọc có thể được chấp nhận mà không chạy vòng Miller–Rabin nào. |
-| Seed minh họa trong `main_prng.cpp` chưa được khởi tạo đầy đủ | Ví dụ chưa bảo đảm tính tái lập của luồng đầu ra. |
-| `randombytes` dùng `uint8_t outlen` | Độ dài chỉ biểu diễn đến 255 byte; nhu cầu lấy nhiều byte hơn cần đổi sang `size_t`. Lời gọi 32 byte hiện tại nằm trong phạm vi. |
-| Phụ thuộc `getrandom` và kiểu nguyên 128 bit mở rộng | Không bảo đảm biên dịch trực tiếp trên mọi hệ điều hành hoặc trình biên dịch C++14. |
-| Chưa có xác thực, dẫn xuất khóa và kiểm tra khóa công khai từ bên ngoài | Mới thể hiện nguyên lý trao đổi khóa, chưa đủ thành một giao thức bảo vệ dữ liệu thực tế. |
-| Nhánh xử lý phụ thuộc bit số mũ và có in giá trị bí mật | Có nguy cơ lộ thông tin qua thời gian chạy hoặc log nếu áp dụng trong môi trường thực tế. |
-| Kích thước 512 bit | Đáp ứng đề bài nhưng không đạt mức an toàn cần thiết cho triển khai hiện đại. |
+| Hạn chế                                                                 | Tác động                                                                                                                         |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Nhân mô-đun theo từng bit                                               | Sinh số nguyên tố an toàn và lũy thừa với khóa lớn có thể chậm.                                                                  |
+| Dung lượng số lớn cố định, không báo lỗi tràn cộng hoặc hụt trừ         | Người dùng thư viện phải tự bảo đảm các bất biến của thuật toán.                                                                 |
+| Một số đầu vào chưa được kiểm tra đầy đủ                                | Cần xử lý mô-đun 0, khoảng ngẫu nhiên không hợp lệ, khoảng toàn miền và `bitsize` không phù hợp.                                 |
+| `isPrime` có đối số mặc định `ctx = nullptr`                            | Nếu đầu vào cần đến bước Miller–Rabin, mã sẽ dùng con trỏ này để sinh cơ số; phải truyền trạng thái PRNG hợp lệ.                 |
+| Chưa ngăn `iterations = 0`                                              | Số lẻ vượt bộ lọc có thể được chấp nhận mà không chạy vòng Miller–Rabin nào.                                                     |
+| Seed minh họa trong `main_prng.cpp` chưa được khởi tạo đầy đủ           | Ví dụ chưa bảo đảm tính tái lập của luồng đầu ra.                                                                                |
+| `randombytes` dùng `uint8_t outlen`                                     | Độ dài chỉ biểu diễn đến 255 byte; nhu cầu lấy nhiều byte hơn cần đổi sang `size_t`. Lời gọi 32 byte hiện tại nằm trong phạm vi. |
+| Phụ thuộc `getrandom` và kiểu nguyên 128 bit mở rộng                    | Không bảo đảm biên dịch trực tiếp trên mọi hệ điều hành hoặc trình biên dịch C++14.                                              |
+| Chưa có xác thực, dẫn xuất khóa và kiểm tra khóa công khai từ bên ngoài | Mới thể hiện nguyên lý trao đổi khóa, chưa đủ thành một giao thức bảo vệ dữ liệu thực tế.                                        |
+| Nhánh xử lý phụ thuộc bit số mũ và có in giá trị bí mật                 | Có nguy cơ lộ thông tin qua thời gian chạy hoặc log nếu áp dụng trong môi trường thực tế.                                        |
+| Kích thước 512 bit                                                      | Đáp ứng đề bài nhưng không đạt mức an toàn cần thiết cho triển khai hiện đại.                                                    |
 
 Trong luồng hiện tại, `p`, `g` và khóa công khai đều được tạo nội bộ. Nếu phát triển thành hai bên trao đổi qua mạng, cần kiểm tra tham số và khóa công khai nhận được theo nhóm đã chọn, đồng thời xác thực đối tác.
 

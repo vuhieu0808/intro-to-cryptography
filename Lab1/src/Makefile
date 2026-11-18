@@ -19,7 +19,7 @@ PRNG_SRC:=$(ROOT)/lib/prng.cpp
 BIN:=bin
 BUILD:=bin/build
 
-.PHONY: all folders prng run-prng main run test-bigint test-modular test-dh test-all clean
+.PHONY: all folders prng run-prng main run test-bigint test-modular test-dh test-prime test-all clean
 
 all: main
 
@@ -54,10 +54,15 @@ test-modular: folders
 
 test-dh: folders
 	@echo -e "\n### Compiling and running dhTest\n"
-	$(CPP) $(CPP_FLAGS) $(ROOT)/test/dhTest.cpp $(ROOT)/dh.cpp $(PRNG_SRC) $(SHA3_SRC) $(INCLUDE) $(LIB) -o $(BIN)/dhTest
+	$(CPP) $(CPP_FLAGS) $(ROOT)/test/dhTest.cpp $(PRNG_SRC) $(SHA3_SRC) $(INCLUDE) $(LIB) -o $(BIN)/dhTest
 	./$(BIN)/dhTest
 
-test-all: test-bigint test-modular test-dh
+test-prime: folders
+	@echo -e "\n### Compiling and running primeTest\n"
+	$(CPP) $(CPP_FLAGS) $(ROOT)/test/primeTest.cpp $(PRNG_SRC) $(SHA3_SRC) $(INCLUDE) $(LIB) -o $(BIN)/primeTest
+	./$(BIN)/primeTest
+
+test-all: test-bigint test-modular test-dh test-prime
 
 clean:
 	rm -rf ./bin
